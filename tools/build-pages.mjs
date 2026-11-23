@@ -20,6 +20,8 @@ const HEAD_START = [
   '<meta name="robots" content="noindex, nofollow">',
   '<link rel="preconnect" href="https://fonts.googleapis.com">',
   '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>',
+  // The site has no icon of its own: an empty one stops browsers asking the host for favicon.ico.
+  '<link rel="icon" href="data:,">',
 ];
 
 const siteDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');

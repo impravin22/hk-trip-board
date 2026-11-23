@@ -37,6 +37,8 @@ test('the web-host build is a complete document that asks search engines to stay
   assert.match(head, /<meta name="robots" content="noindex, nofollow">/);
   assert.match(head, /<link rel="preconnect" href="https:\/\/fonts\.googleapis\.com">/);
   assert.match(head, /<link rel="preconnect" href="https:\/\/fonts\.gstatic\.com" crossorigin>/);
+  // The site has no icon of its own. An empty one stops every visit from asking the host for favicon.ico and getting a 404.
+  assert.match(head, /<link rel="icon" href="data:,">/);
   assert.match(head, /<title>Hong Kong Trip Board<\/title>/);
   assert.match(head, /<link rel="stylesheet" href="site\.css">/);
   assert.equal(head.includes('claude:'), false, 'a tag meant for the Claude host is still in the head');
