@@ -4,6 +4,15 @@ preview-light.html
 .maestro/
 .hallmark/
 
+# Build output, if it is ever written inside a copy of the repository
+dist/
+_site/
+
+# Local settings and secrets: none are needed here, and none belong in a public repository
+.env
+.env.*
+.claude/
+
 # Tooling and system files
 node_modules/
 .DS_Store

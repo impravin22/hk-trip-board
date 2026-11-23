@@ -1,27 +1,30 @@
-# Tests the site, builds it for a plain web host and publishes it to GitHub Pages.
+# Tests the site and builds it for a plain web host. A push to main also publishes it to GitHub Pages.
 name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
-# The least the two jobs need: read the code, publish a Pages deployment, and prove who is publishing it.
+# By default a job may only read the code. The deploy job asks for the rest itself.
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
-# One deployment at a time. A newer push waits for the one in flight instead of cancelling it half way.
+# One run per branch at a time. A newer push waits for the one in flight instead of cancelling it half way.
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+        with:
+          # The token is not left in the checkout: the tests and the build have no use for it.
+          persist-credentials: false
       - uses: actions/setup-node@v7
         with:
           node-version: 24
@@ -29,14 +32,20 @@ jobs:
         run: node --test tests/*.test.js
       - name: Build the site
         run: node tools/build-pages.mjs "$RUNNER_TEMP/site"
-      - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:
           path: ${{ runner.temp }}/site
 
   deploy:
     needs: build
+    # Pull requests and manual runs from other branches are tested and built, never published.
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Only this job may publish a Pages deployment and prove who is publishing it.
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

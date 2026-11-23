@@ -42,14 +42,20 @@ E2E_LIGHT_PAGE=/tmp/trip-site/index.html PUPPETEER_CORE=/path/to/node_modules/pu
 
 ## Deploy
 
-Every push to `main` runs the unit tests, builds the site with `tools/build-pages.mjs` and publishes it to GitHub Pages. The workflow is `.github/workflows/pages.yml`. The browser checks do not run there.
+Every push to `main` runs the unit tests, builds the site with `tools/build-pages.mjs` and publishes it to GitHub Pages. A pull request runs the tests and the build, and publishes nothing. The workflow is `.github/workflows/pages.yml`. The browser checks do not run there.
+
+In the repository's settings, Pages must have its source set to GitHub Actions.
 
 ## Privacy
 
-The page names a hotel and travel dates. It carries no booking references, and it asks search engines not to list it. The address is still public: anyone who has it can read the page.
+The page names a hotel, flight numbers and travel dates. It carries no booking references.
+
+Both the site and this repository are public. Anyone who has the address can read the page, and the files here, with their history, can be read and searched on GitHub. The page asks search engines not to list it, which covers the site only, not the repository.
 
 ## Photographs
 
 All 25 photographs come from Wikimedia Commons, under CC0, CC BY or CC BY-SA. Each is credited with its author, source and licence in the page footer and in `images/credits.json`. They are cut and resized, and those adapted copies stay under the same licences.
 
-Icons are from Lucide, under the ISC licence.
+## Licences
+
+The site's own code and text carry no licence: all rights are reserved. Icons are from Lucide, under the ISC licence; the notices are in `THIRD-PARTY.md`.

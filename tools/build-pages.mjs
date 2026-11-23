@@ -3,8 +3,8 @@
 // A plain host does no wrapping, so this writes a complete document and copies the files it needs beside it.
 // Nothing else is copied: no tests, tools, notes or credit lists.
 // Usage: node tools/build-pages.mjs <output folder>
-import { copyFileSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
-import { dirname, join, relative, resolve } from 'node:path';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const TEXT_FILES = ['site.css', 'tokens.css', 'base.css', 'trip-logic.js', 'trip.js'];
@@ -31,9 +31,37 @@ if (!outArgument) {
   process.exit(2);
 }
 const outDir = resolve(outArgument);
-// Writing into the site folder, or a folder that holds it, would overwrite the fragment with the built document.
-if (relative(outDir, siteDir) === '' || !relative(outDir, siteDir).startsWith('..')) {
-  console.error(`The output folder must not be the site folder or one that holds it: ${outDir}`);
+
+/**
+ * A folder's identity on disk. Two spellings of one folder give the same answer: another letter case
+ * on a file system that ignores case, or a path that reaches it through a symlink.
+ * @param {string} folder a folder that exists
+ * @returns {string}
+ */
+function identityOf(folder) {
+  const { dev, ino } = statSync(folder);
+  return `${dev}:${ino}`;
+}
+
+/**
+ * @param {string} folder
+ * @returns {string[]} the identities of the folder and of every folder above it, leaving out any that do not exist yet
+ */
+function identitiesUpFrom(folder) {
+  const chain = [folder];
+  while (dirname(chain.at(-1)) !== chain.at(-1)) {
+    chain.push(dirname(chain.at(-1)));
+  }
+  return chain.filter((path) => existsSync(path)).map(identityOf);
+}
+
+// Refused: the site folder, any folder inside it and any folder that holds it. Writing there would overwrite the
+// page fragment with the built document, or scatter the build through the source. Paths are compared by what they
+// are on disk, not by how they are spelt.
+const isSiteOrInsideIt = identitiesUpFrom(outDir).includes(identityOf(siteDir));
+const holdsSite = existsSync(outDir) && identitiesUpFrom(siteDir).includes(identityOf(outDir));
+if (isSiteOrInsideIt || holdsSite) {
+  console.error(`The output folder must not be the site folder, one inside it or one that holds it: ${outDir}`);
   process.exit(2);
 }
 
