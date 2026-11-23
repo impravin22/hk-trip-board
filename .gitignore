@@ -1,0 +1,9 @@
+# Local preview builds and the output of the browser checks
+preview.html
+preview-light.html
+.maestro/
+.hallmark/
+
+# Tooling and system files
+node_modules/
+.DS_Store

@@ -1,0 +1,234 @@
+/* Hallmark · checked: 2026-11-23 · genre: editorial (inferred) · built: the project, to the owner's brief (a photo-led travel site; photographs from Wikimedia Commons)
+ * nav: a top bar of four views · hero: a photograph wider than the text column, the title set in its sky, a bar of trip facts over its lower edge · signature: every place, day and kind of place shown as its own photograph
+ * axes: light/sans/warm · surface: absolute · contrast: pass · v2.0.0 */
+/* Hallmark · waive 7b · the page and cards are white through --color-bg · the owner asked for a bright site, and the house third text grey passes AA on white only */
+/* Hallmark · waive 26b · no :disabled rule · no control on this page is ever disabled: nothing submits, loads or locks */
+/* Hallmark · waive 49b · a credit's link is the photograph's own title, kept whole so the attribution is exact · it sits in a closed list in the footer and may wrap there */
+/* Hallmark · answered F4 · the hero's second button is white with dark text, so its label stays readable on any photograph · the accent fill is the page's one strong action */
+@import url("./tokens.css");
+@import url("./base.css");
+
+/* Shell: a sticky top bar. On a phone the four views fill it; from 768px the trip's name sits before them. */
+.skip { position: absolute; top: 0; left: var(--page-pad); z-index: var(--z-skip); padding: var(--space-8) var(--space-16); border: var(--rule) solid var(--color-border); border-radius: var(--radius-control); background: var(--color-bg); box-shadow: var(--shadow-card); transform: translateY(-200%); }
+.skip:focus-visible { transform: translateY(var(--space-8)); }
+.nav { position: sticky; top: 0; z-index: var(--z-nav); border-bottom: var(--rule) solid var(--color-border); background: var(--color-bg); }
+.nav__row { display: flex; align-items: center; gap: var(--space-32); max-width: var(--page-width); margin-inline: auto; padding-inline: var(--page-pad); }
+.nav__brand { display: none; }
+.nav__brand-name { font-weight: var(--weight-title); }
+.nav__brand-sub { margin-left: var(--space-8); color: var(--color-text-3); font-size: var(--small-size); line-height: var(--small-line); }
+.nav__views { flex: 1; min-width: 0; }
+.nav__links { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.nav__link { display: flex; align-items: center; justify-content: center; min-height: var(--nav-height); border-bottom: var(--ring) solid transparent; color: var(--color-text-2); font-size: var(--small-size); line-height: var(--small-line); font-weight: var(--weight-label); text-decoration: none; white-space: nowrap; transition: color var(--dur-fast), border-color var(--dur-fast), background-color var(--dur-fast); }
+.nav__link:active { background: var(--color-surface); }
+.nav__link[aria-current="page"] { border-bottom-color: var(--color-accent); color: var(--color-text); }
+.nav__link:focus-visible { outline-offset: calc(var(--ring) * -1); }
+
+/* Page: one centred text column, with a wider track that only the hero uses. A view that is not open is hidden once scripts run. */
+main { display: grid; flex: 1 0 auto; grid-template-columns: [full-start] minmax(var(--page-pad), 1fr) [content-start] minmax(0, var(--content-width)) [content-end] minmax(var(--page-pad), 1fr) [full-end]; align-content: start; row-gap: var(--gap-section); width: 100%; padding-bottom: var(--gap-section); }
+main > * { grid-column: content; min-width: 0; }
+main > .hero { grid-column: full; }
+main:focus-visible, .section:focus-visible, .day:focus-visible, [data-view-title]:focus-visible { outline: none; }
+.section { min-width: 0; scroll-margin-top: calc(var(--nav-height) + var(--space-16)); }
+.js [data-view]:not(.is-active) { display: none; }
+/* With no script the day tabs and the search do nothing, and the countdown would only repeat the flight: all three go. */
+:root:not(.js) .switch__tabs, :root:not(.js) .tools, :root:not(.js) .tile--next { display: none; }
+.head { display: grid; gap: var(--space-4); margin-bottom: var(--space-20); }
+.head h2 { font-size: var(--section-size); line-height: var(--section-line); }
+.view-head { gap: var(--space-8); margin-block: var(--space-32) var(--space-24); }
+.view-head h1 { font-size: var(--title-size); line-height: var(--title-line); }
+.lead { max-width: var(--measure); color: var(--color-text-2); }
+
+/* Buttons: pills. The accent one is the page's one strong action. */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-8); min-height: var(--control); padding-inline: var(--space-20); border: var(--rule) solid var(--color-control); border-radius: var(--radius-pill); background: var(--color-bg); color: var(--color-text); font-weight: var(--weight-label); text-decoration: none; cursor: pointer; transition: background-color var(--dur-fast), border-color var(--dur-fast); }
+.btn:active { background: var(--color-border); }
+.btn--accent { border-color: var(--color-accent); background: var(--color-accent); color: var(--color-accent-ink); }
+.btn--accent:active { border-color: var(--color-accent-hover); background: var(--color-accent-hover); }
+.btn--light { border-color: var(--color-bg); }
+
+/* Hero: one photograph, wider than the text column, with the title set in its sky. The trip's facts sit on a
+   white bar over its lower edge, so the skyline between them stays clear. */
+.hero { display: grid; }
+.hero__stage { position: relative; display: grid; align-items: start; min-height: var(--hero-height); overflow: hidden; background: var(--color-text); color: var(--color-on-photo); }
+.hero__photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--hero-focus); }
+.hero__stage::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, var(--color-shade-top) 0%, var(--color-shade-top) var(--hero-shade-hold), var(--color-shade-none) var(--hero-shade-end)); pointer-events: none; }
+.pick::after, .day__head::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, var(--color-shade-strong) 0%, var(--color-shade-mid) 35%, var(--color-shade-none) 75%); pointer-events: none; }
+.hero__body { position: relative; z-index: 1; display: grid; justify-items: start; gap: var(--space-12); padding: var(--space-24) var(--page-pad) calc(var(--glance-overlap) + var(--space-24)); }
+.hero__body > * { max-width: var(--hero-text-width); }
+.hero h1 { font-size: var(--display-size); line-height: var(--display-line); }
+.hero__lead { font-size: var(--lead-size); line-height: var(--lead-line); }
+.hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-12); margin-top: var(--space-8); }
+.hero__stage :focus-visible { outline-color: var(--color-on-photo); }
+
+/* The trip at a glance: what comes next and the three bookings, as one bar over the photograph's lower edge.
+   The gaps between its cells show the bar's own border colour, so the hairlines follow any number of columns. */
+.glance { position: relative; z-index: 1; display: grid; gap: var(--rule); width: min(100% - 2 * var(--page-pad), var(--content-width)); margin: calc(var(--glance-overlap) * -1) auto 0; overflow: hidden; border: var(--rule) solid var(--color-border); border-radius: var(--radius-card); background: var(--color-border); box-shadow: var(--shadow-float); }
+.tile { display: grid; align-content: start; gap: var(--space-2); padding: var(--space-16) var(--card-pad); background: var(--color-bg); }
+.tile__label { display: flex; align-items: center; gap: var(--space-8); margin-bottom: var(--space-2); color: var(--color-text-2); font-size: var(--small-size); line-height: var(--small-line); font-weight: var(--weight-label); }
+.tile__label .icon { color: var(--color-accent); }
+.tile__value { font-size: var(--item-size); line-height: var(--item-line); font-weight: var(--weight-title); font-variant-numeric: tabular-nums; }
+.tile__sub { color: var(--color-text-3); font-size: var(--small-size); line-height: var(--small-line); }
+/* The six kinds of place, each as its own picture. */
+.picks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-12); }
+.pick { position: relative; display: grid; align-items: end; aspect-ratio: 3 / 4; overflow: hidden; border-radius: var(--radius-card); background: var(--color-text); color: var(--color-on-photo); text-decoration: none; transition: box-shadow var(--dur-fast); }
+.pick__photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.pick__body { position: relative; z-index: 1; display: grid; padding: var(--space-16); }
+.pick__name { font-size: var(--item-size); line-height: var(--item-line); font-weight: var(--weight-title); }
+.pick__count { font-size: var(--small-size); line-height: var(--small-line); }
+
+/* Card: one recipe for the to-do list, the fixed times, arrival, the bookings and each day. */
+.card, .day { overflow: hidden; border: var(--rule) solid var(--color-border); border-radius: var(--radius-card); background: var(--color-bg); }
+.card__head { display: grid; gap: var(--space-4); padding: var(--card-pad) var(--card-pad) 0; }
+.card__title { font-size: var(--item-size); line-height: var(--item-line); }
+.card__desc { color: var(--color-text-3); font-size: var(--small-size); line-height: var(--small-line); }
+.card > .rows, .day > .rows { padding: var(--space-8) var(--card-pad) var(--space-12); }
+.rows > .row:not([hidden]) ~ .row { border-top: var(--rule) solid var(--color-border); }
+.badge, .live { display: inline-flex; align-items: center; padding: var(--space-2) var(--space-8); border-radius: var(--radius-pill); background: var(--color-text); color: var(--color-bg); font-size: var(--small-size); line-height: var(--small-line); font-weight: var(--weight-label); white-space: nowrap; }
+.notice { padding-inline: var(--card-pad); color: var(--color-destructive); font-size: var(--small-size); line-height: var(--small-line); }
+.notice:not(:empty) { padding-top: var(--space-8); }
+/* Two blocks side by side from 1024px: the to-do list with the fixed times, a day with the bookings. */
+.split { display: grid; align-items: start; gap: var(--gap-section) var(--gap); width: 100%; }
+.split__main { display: grid; gap: var(--gap); min-width: 0; }
+/* A to-do row: the label covers the whole row, the box included, so a tap anywhere ticks it. */
+.todo { display: grid; grid-template-columns: minmax(0, 1fr); }
+.todo__box { grid-column: 1; grid-row: 1; align-self: center; justify-self: start; z-index: 1; width: var(--tick); height: var(--tick); margin: 0; accent-color: var(--color-accent); cursor: pointer; }
+.todo__label { display: flex; grid-column: 1; grid-row: 1; align-items: center; min-height: var(--touch); padding-left: calc(var(--tick) + var(--space-12)); cursor: pointer; }
+.todo__note { margin-top: calc(var(--space-8) * -1); padding: 0 0 var(--space-8) calc(var(--tick) + var(--space-12)); color: var(--color-text-3); font-size: var(--small-size); line-height: var(--small-line); }
+.todo__box:checked + .todo__label { color: var(--color-text-3); text-decoration: line-through; }
+.times__row { display: grid; grid-template-columns: var(--when-column) minmax(0, 1fr) auto; align-items: center; column-gap: var(--space-12); padding-block: var(--space-12); }
+.times__time { grid-row: 1 / span 2; align-self: start; font-weight: var(--weight-label); font-variant-numeric: tabular-nums; }
+.times__what { grid-column: 2; font-weight: var(--weight-label); }
+.times__where { grid-column: 2; color: var(--color-text-3); font-size: var(--small-size); line-height: var(--small-line); }
+.times__state { grid-column: 3; grid-row: 1 / span 2; }
+.arrive__body { display: grid; gap: var(--space-24); padding: var(--space-16) var(--card-pad) var(--card-pad); }
+.arrive__text { display: grid; align-content: start; gap: var(--space-24); }
+.address { display: grid; justify-items: start; gap: var(--space-4); padding-bottom: var(--space-24); border-bottom: var(--rule) solid var(--color-border); }
+.address .btn { margin-top: var(--space-12); }
+.address__label { color: var(--color-text-3); font-size: var(--small-size); line-height: var(--small-line); }
+.address__local { font-size: var(--local-size); line-height: var(--local-line); font-weight: var(--weight-title); }
+.facts { display: grid; gap: var(--space-12); }
+.facts > div { display: grid; grid-template-columns: var(--label-column) minmax(0, 1fr); column-gap: var(--space-12); }
+.facts dt { color: var(--color-text-3); font-size: var(--small-size); line-height: var(--text-line); }
+.photo { aspect-ratio: 3 / 2; overflow: hidden; border-radius: var(--radius-control); background: var(--color-surface); }
+.photo__img { width: 100%; height: 100%; object-fit: cover; }
+.caption { margin-top: var(--space-8); color: var(--color-text-3); font-size: var(--small-size); line-height: var(--small-line); }
+
+/* Plan: day tabs, then the day as a card with its own photograph over a list of times. */
+/* :where keeps these at zero specificity, so the rule that hides a closed view still wins. */
+:where(#plan, #places, #info) { display: grid; gap: var(--gap); }
+:where(#plan) { justify-items: start; }
+:where(#plan, #places, #info) > .view-head { margin-bottom: var(--space-8); }
+.daytabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--space-2); width: 100%; padding: var(--space-4); border-radius: var(--radius-pill); background: var(--color-surface); }
+.daytabs__tab { min-height: var(--touch); padding: 0 var(--space-8); border: 0; border-radius: var(--radius-pill); background: transparent; color: var(--color-text-2); font-size: var(--small-size); line-height: var(--small-line); font-weight: var(--weight-label); cursor: pointer; transition: background-color var(--dur-fast), color var(--dur-fast); }
+.daytabs__tab:active { color: var(--color-text); }
+.daytabs__tab[aria-selected="true"] { background: var(--color-text); color: var(--color-bg); }
+.day { width: 100%; }
+.js .day { scroll-margin-top: calc(var(--nav-height) + var(--tabs-clearance)); }
+.day__head { position: relative; display: grid; align-items: end; aspect-ratio: 16 / 7; overflow: hidden; background: var(--color-text); color: var(--color-on-photo); }
+.day__photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.day__title { position: relative; z-index: 1; padding: var(--space-16) var(--card-pad); font-size: var(--section-size); line-height: var(--section-line); }
+.sched__row { display: grid; grid-template-columns: var(--time-column) minmax(0, 1fr) auto; column-gap: var(--space-12); padding-block: var(--space-12); }
+.sched__time { font-weight: var(--weight-label); font-variant-numeric: tabular-nums; }
+.sched__what { grid-column: 2; font-weight: var(--weight-label); }
+.sched__note { grid-column: 2; color: var(--color-text-3); font-size: var(--small-size); line-height: var(--small-line); }
+.sched__state { grid-column: 3; grid-row: 1; color: var(--color-text-3); font-size: var(--small-size); line-height: var(--text-line); }
+.booking { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--space-16); row-gap: var(--space-2); padding-block: var(--space-12); }
+.booking__key { font-weight: var(--weight-label); }
+.booking__when { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.booking__what { color: var(--color-text-3); font-size: var(--small-size); line-height: var(--small-line); }
+.booking__status { text-align: right; color: var(--color-text-3); font-size: var(--small-size); line-height: var(--small-line); white-space: nowrap; }
+
+/* Places: a search field and filter chips, then the places. The top picks show as picture cards; any other filter is a plain list. */
+.tools { display: grid; gap: var(--space-12); }
+.search { position: relative; color: var(--color-text-3); }
+.search .icon { position: absolute; top: 50%; left: var(--space-16); pointer-events: none; transform: translateY(-50%); }
+.input { width: 100%; min-height: var(--control); caret-color: var(--color-accent); padding: 0 var(--space-16) 0 calc(var(--space-16) + var(--icon) + var(--space-8)); border: var(--rule) solid var(--color-control); border-radius: var(--radius-pill); background: var(--color-bg); color: var(--color-text); }
+.input::placeholder { color: var(--color-text-3); }
+.chips { display: flex; gap: var(--space-8); margin: calc(var(--space-6) * -1) calc(var(--page-pad) * -1); padding: var(--space-6) var(--page-pad); overflow-x: auto; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+/* The radio sits inside its chip and fills it, so the chip itself takes focus and scrolls into view. */
+.chip { position: relative; display: inline-flex; flex: none; align-items: center; min-height: var(--touch); padding-inline: var(--space-16); border: var(--rule) solid var(--color-control); border-radius: var(--radius-pill); background: var(--color-bg); font-size: var(--small-size); line-height: var(--small-line); font-weight: var(--weight-label); white-space: nowrap; cursor: pointer; transition: background-color var(--dur-fast), border-color var(--dur-fast), color var(--dur-fast); }
+.chip input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; border-radius: inherit; appearance: none; cursor: pointer; }
+.chip input:focus-visible { outline: var(--ring) solid var(--color-focus); outline-offset: var(--ring); }
+.chip:active { background: var(--color-surface); }
+.chip:has(input:checked) { border-color: var(--color-text); background: var(--color-text); color: var(--color-bg); }
+.count { color: var(--color-text-3); font-size: var(--small-size); line-height: var(--small-line); }
+.list { border: var(--rule) solid var(--color-border); border-radius: var(--radius-card); }
+.list:not(:has(> .row:not([hidden]))) { display: none; }
+.list > .row { padding-inline: var(--space-16); }
+.place { position: relative; }
+.place__photo { display: none; }
+.place__summary, .qa summary { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: var(--space-16); min-height: var(--row-min); padding-block: var(--space-12); cursor: pointer; list-style: none; }
+.place__summary::-webkit-details-marker, .qa summary::-webkit-details-marker { display: none; }
+.place__summary::after, .qa summary::after { content: ""; grid-column: 2; grid-row: 1 / span 2; width: var(--space-8); height: var(--space-8); margin: 0 var(--space-4) var(--space-4); border-right: var(--ring) solid var(--color-text-3); border-bottom: var(--ring) solid var(--color-text-3); transform: rotate(45deg); transition: transform var(--dur-fast); }
+.more[open] > .place__summary::after, .qa[open] > summary::after { transform: translateY(var(--space-4)) rotate(225deg); }
+.place__summary { row-gap: var(--space-2); padding-right: var(--map-space); }
+.place__name { grid-column: 1; font-size: var(--item-size); line-height: var(--item-line); font-weight: var(--weight-title); }
+.place__fact { grid-column: 1; color: var(--color-text-2); }
+/* A one-tap link to the map sits at the row's top right; the summary leaves room for it. */
+.place__map { position: absolute; top: var(--space-12); right: var(--space-16); display: inline-flex; align-items: center; justify-content: center; gap: var(--space-6); min-width: var(--touch); min-height: var(--touch); padding-inline: var(--space-12); border: var(--rule) solid var(--color-control); border-radius: var(--radius-pill); background: var(--color-bg); color: var(--color-text); font-size: var(--small-size); line-height: var(--small-line); font-weight: var(--weight-label); text-decoration: none; transition: background-color var(--dur-fast); }
+.place__map:active { background: var(--color-border); }
+.place__map-label { display: none; }
+.more__body { display: grid; gap: var(--space-12); padding-bottom: var(--space-16); }
+.more__links { display: flex; flex-wrap: wrap; column-gap: var(--space-24); font-size: var(--small-size); line-height: var(--small-line); font-weight: var(--weight-label); }
+.more__links a { display: inline-flex; align-items: center; min-height: var(--touch); }
+.qa summary { font-size: var(--item-size); line-height: var(--item-line); font-weight: var(--weight-label); }
+.qa__a { display: grid; gap: var(--space-12); max-width: var(--measure); padding-bottom: var(--space-16); color: var(--color-text-2); }
+#info .list { max-width: var(--info-width); }
+.empty { display: grid; justify-items: start; gap: var(--space-8); padding: var(--space-32) var(--space-16); border: var(--rule) dashed var(--color-control); border-radius: var(--radius-card); }
+.empty__title { font-size: var(--item-size); line-height: var(--item-line); font-weight: var(--weight-title); }
+.empty__text { color: var(--color-text-2); }
+.empty .btn { margin-top: var(--space-8); }
+/* Top picks as picture cards. Scripts must run for the filter to be real, so the cards need them too. */
+.js #places:has(#filter-top:checked) .places { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-min)), 1fr)); gap: var(--gap); border: 0; border-radius: 0; }
+.js #places:has(#filter-top:checked) .place { overflow: hidden; padding: 0; border: var(--rule) solid var(--color-border); border-radius: var(--radius-card); background: var(--color-bg); box-shadow: var(--shadow-card); }
+.js #places:has(#filter-top:checked) .place__photo { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.js #places:has(#filter-top:checked) .place__summary { padding: var(--space-16); }
+.js #places:has(#filter-top:checked) .more__body { padding: 0 var(--space-16) var(--space-16); }
+.js #places:has(#filter-top:checked) .place__map { top: var(--space-12); right: var(--space-12); border-color: var(--color-bg); box-shadow: var(--shadow-card); }
+
+/* Footer */
+.footer { display: grid; gap: var(--space-8); width: 100%; max-width: var(--page-width); margin-inline: auto; padding: var(--space-24) var(--page-pad) var(--space-32); border-top: var(--rule) solid var(--color-border); color: var(--color-text-3); font-size: var(--small-size); line-height: var(--small-line); }
+.footer a { color: var(--color-text-2); }
+.credits summary { display: inline-flex; align-items: center; min-height: var(--touch); color: var(--color-text-2); font-weight: var(--weight-label); cursor: pointer; }
+.credits ul { display: grid; padding-bottom: var(--space-8); }
+/* Each credit link is tall enough for a thumb, even inside a line of text. */
+.credits a { display: inline-block; min-width: var(--touch); padding-block: var(--space-12); }
+
+/* Hover states, only where a pointer can hover: on a touch screen a hover would stick after a tap. */
+@media (hover: hover) {
+  .nav__link:hover, .daytabs__tab:not([aria-selected="true"]):hover { color: var(--color-text); }
+  .btn:hover, .place__map:hover { background: var(--color-surface); }
+  .chip:not(:has(input:checked)):hover { background: var(--color-surface); }
+  .btn--accent:hover { border-color: var(--color-accent-hover); background: var(--color-accent-hover); }
+  .pick:hover { box-shadow: var(--shadow-float); }
+  .pick:hover .pick__name, .place__summary:hover .place__name, .qa summary:hover { text-decoration: underline; text-decoration-thickness: var(--rule); text-underline-offset: var(--underline-offset); }
+}
+
+@media (min-width: 48rem) {
+  .nav__brand { display: block; }
+  .nav__views { flex: none; margin-left: auto; }
+  .nav__links { display: flex; gap: var(--space-4); }
+  .nav__link { padding-inline: var(--space-16); }
+  main { padding-top: var(--space-24); }
+  .hero__stage { width: min(100% - 2 * var(--page-pad), var(--hero-width)); margin-inline: auto; border-radius: var(--radius-hero); }
+  /* From about 1232px the title lines up with the text column below: the side padding is whatever the photograph has
+     beyond that column. Narrower than that the photograph is no wider than the column, and the title sits 40px inside it. */
+  .hero__body { padding: var(--space-48) max(var(--space-40), calc((100% - var(--content-width)) / 2)) calc(var(--glance-overlap) + var(--space-48)); }
+  .glance { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  :root:not(.js) .glance { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .picks { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); }
+  .daytabs { width: auto; grid-auto-columns: auto; }
+  .daytabs__tab { padding-inline: var(--space-20); }
+  .day__head { aspect-ratio: 16 / 5; }
+  .tools { grid-template-columns: minmax(0, var(--field-width)) minmax(0, 1fr) auto; align-items: center; }
+  .chips { flex-wrap: wrap; margin: 0; padding: 0; overflow: visible; }
+  .place__map-label { display: inline; }
+}
+
+/* From 1024px: the to-do list sits beside the fixed times, the day beside the bookings. */
+@media (min-width: 64rem) {
+  .glance { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .picks { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .arrive__body { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .split { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+}
