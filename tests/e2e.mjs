@@ -31,7 +31,7 @@ const ALLOWED_WEIGHTS = [400, 600, 700];
 const WHITE = 'rgb(255, 255, 255)';
 const PRIMARY_TEXT = 'rgb(42, 42, 42)';
 const SIDE_COLUMN_OFFSET_PX = 300;
-const PLACE_COUNT = 47;
+const PLACE_COUNT = 52;
 const TOP_PICK_COUNT = 12;
 /** At 1440px the hero photograph may sit this far in from each side of the window, and no further. */
 const HERO_INSET_MAX_PX = 48;
